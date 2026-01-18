@@ -51,7 +51,7 @@ const HeroSection = () => {
         alt="eclipse"
         width={420}
         height={420}
-        className="absolute -right-[200px] top-1/2 -translate-y-1/2"
+        className="absolute -right-[200px] top-1/2 -translate-y-1/2 -z-1"
       />
     </section>
   );
