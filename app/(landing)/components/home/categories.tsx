@@ -1,3 +1,5 @@
+import { getImageUrl } from "@/app/lib/api";
+import { Category } from "@/app/types";
 import Image from "next/image";
 import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
@@ -31,7 +33,11 @@ const categoryList = [
   { index: 6, name: "Tennis", imgUrl: "category-tennis.svg" },
 ];
 
-const CategoriesSection = () => {
+type TCategoriesProps = {
+  categories: Category[]
+}
+
+const CategoriesSection = ({categories} : TCategoriesProps) => {
   return (
     <section id="category-section" className="container mx-auto">
       <div className="flex justify-between">
@@ -44,19 +50,19 @@ const CategoriesSection = () => {
         </div>
       </div>
       <div className="grid grid-cols-6 gap-12">
-        {categoryList.map((category) => {
+        {categories.map((category) => {
           return (
             <div
-              key={category.index}
+              key={category._id}
               className="rounded-lg bg-gradient-to-r from-[#F1F1F1] to-[#F7F7F7] w-full aspect-square flex justify-center"
             >
               <div className="self-center">
                 <Image
-                  src={`/images/categories/${category.imgUrl}`}
+                  src={getImageUrl(category.imageUrl)}
                   alt="category"
                   width={86}
                   height={86}
-                  className="mb-[10px]"
+                  className="mb-2.5"
                 />
                 <div className="text-primary font-medium text-xl text-center">
                   {category.name}

@@ -8,13 +8,24 @@ import {
 import Button from "../ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useCartStore } from "@/app/hooks/use-cart-store";
+import { Product } from "@/app/types";
 
 
+type TProductActionsProps = {
+  stock: number,
+  product: Product;
+}
 
-
-const ProductActions = () => {
+const ProductActions = ({stock, product}: TProductActionsProps) => {
   const {push} = useRouter();
   const [qty, setQty] = useState(1);
+
+  const {addItem} = useCartStore();
+
+  const handleAddToCart = () => {
+    addItem(product, qty);
+  }
   
 
   return (
@@ -25,16 +36,16 @@ const ProductActions = () => {
         </div>
         <div className="flex flex-col">
           <button className="border-b border-gray-500 cursor-pointer h-1/2 aspect-square flex items-center justify-center"
-          onClick={() => setQty(qty+1)}>
+          onClick={() => setQty(qty < stock ? qty+1 : qty)}>
             <FiChevronUp />
           </button>
           <button className="cursor-pointer h-1/2 aspect-square flex items-center justify-center"
-          onClick={() => setQty(qty > 1 ? qty-1 : 1)}>
+          onClick={() => setQty(qty > 1 ? qty-1 : qty)}>
             <FiChevronDown />
           </button>
         </div>
       </div>
-      <Button className="px-20 w-full ">
+      <Button className="px-20 w-full " onClick={() => handleAddToCart()}>
         <FiShoppingCart size={24} /> Add To Cart
       </Button>
       <Button className="px-20 w-full " variant="dark" onClick={() => {push("/checkout")}}>
