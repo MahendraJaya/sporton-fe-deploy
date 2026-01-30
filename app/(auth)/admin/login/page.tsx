@@ -32,7 +32,7 @@ const LoginPage = () => {
       if (res.token) router.push("/admin/products");
     } catch (error) {
       console.error("🚀 ~ handleLogin ~ error:", error);
-      setErrorMessage(error.message || "Something went wrong");
+      
     } finally {
       setIsLoading(false);
     }
