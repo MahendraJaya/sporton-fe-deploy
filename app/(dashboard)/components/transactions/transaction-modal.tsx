@@ -26,6 +26,8 @@ const TransactionModal = ({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
+  if (!transaction) return "";
+
   const handleStatusUpdate = async (status: "paid" | "rejected") => {
     setIsUpdating(true);
     try {
