@@ -1,41 +1,43 @@
 import { getImageUrl } from "@/app/lib/api";
+import { Transaction } from "@/app/types";
 // import { getAllProducts } from "@/app/services/product.service";
 import priceFormatter from "@/app/utils/price-converter";
 import Image from "next/image";
 import {FiEye} from "react-icons/fi";
 
 type TTransactionTableProps = {
-  onOpen: () => void
+  transactions: Transaction[];
+  isOpenModalEdit: (transaction:Transaction) => void;
 }
 
-const TransactionTable = ({onOpen} : TTransactionTableProps) => {
+const TransactionTable = ({ transactions, isOpenModalEdit} : TTransactionTableProps) => {
   //   const products = await getAllProducts();
-  const transactions = [
-    {
-      _id: "1",
-      date: "23/02/2026 19:32",
-      customer: "John Doe",
-      contact: "081274659260",
-      total: 450000,
-      status: "pending",
-    },
-    {
-      _id: "2",
-      date: "23/02/2026 19:32",
-      customer: "John Doe",
-      contact: "081274659260",
-      total: 450000,
-      status: "paid",
-    },
-    {
-      _id: "3",
-      date: "23/02/2026 19:32",
-      customer: "John Doe",
-      contact: "081274659260",
-      total: 450000,
-      status: "rejected",
-    },
-  ];
+  // const transactions = [
+  //   {
+  //     _id: "1",
+  //     date: "23/02/2026 19:32",
+  //     customer: "John Doe",
+  //     contact: "081274659260",
+  //     total: 450000,
+  //     status: "pending",
+  //   },
+  //   {
+  //     _id: "2",
+  //     date: "23/02/2026 19:32",
+  //     customer: "John Doe",
+  //     contact: "081274659260",
+  //     total: 450000,
+  //     status: "paid",
+  //   },
+  //   {
+  //     _id: "3",
+  //     date: "23/02/2026 19:32",
+  //     customer: "John Doe",
+  //     contact: "081274659260",
+  //     total: 450000,
+  //     status: "rejected",
+  //   },
+  // ];
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -70,10 +72,10 @@ const TransactionTable = ({onOpen} : TTransactionTableProps) => {
               key={transaction._id}
               className="border-b border-gray-200 font-semibold last:border-b-0"
             >
-              <td className="px-6 py-4">{transaction.date}</td>
-              <td className="px-6 py-4">{transaction.customer}</td>
-              <td className="px-6 py-4">{transaction.contact}</td>
-              <td className="px-6 py-4">{priceFormatter(transaction.total)}</td>
+              <td className="px-6 py-4">{transaction.createdAt}</td>
+              <td className="px-6 py-4">{transaction.customerName}</td>
+              <td className="px-6 py-4">{transaction.customerContact}</td>
+              <td className="px-6 py-4">{priceFormatter(Number(transaction.totalPayment))}</td>
               <td className="px-6 py-4">
                 <div
                   className={`px-3 text-center text-sm py-1 rounded-full border w-fit ${getStatusColor(transaction.status)}`}
@@ -82,8 +84,8 @@ const TransactionTable = ({onOpen} : TTransactionTableProps) => {
                 </div>
               </td>
               <td className="px-6 py-4 text-gray-600">
-                <button onClick={onOpen} className="flex gap-2 hover:bg-gray-100 w-fit py-1 px-2 rounded-md items-center cursor-pointer">
-                  <FiEye size={20} />
+                <button onClick={() => {isOpenModalEdit(transaction)}} className="flex gap-2 hover:bg-gray-100 w-fit py-1 px-2 rounded-md items-center cursor-pointer">
+                  <FiEye size={20}  />
                   View Details
                 </button>
               </td>

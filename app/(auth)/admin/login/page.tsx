@@ -1,12 +1,42 @@
 "use client";
 
 import Button from "@/app/(landing)/components/ui/button";
+import { login } from "@/app/services/auth.service";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
+import { useEffect, useState } from "react";
 
 const LoginPage = () => {
-  const { push } = useRouter();
+  const router = useRouter();
+  const [credentials, setCredentials] = useState<{
+    email: string;
+    password: string;
+  }>({
+    email: "",
+    password: "",
+  });
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) router.push("/admin/products");
+  }, [router]);
+
+  const handleLogin = async () => {
+    setIsLoading(true);
+    try {
+      const res = await login(credentials);
+
+      if (res.token) router.push("/admin/products");
+    } catch (error) {
+      console.error("🚀 ~ handleLogin ~ error:", error);
+      setErrorMessage(error.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <main className="bg-[#F7F9FA] w-full min-h-screen flex justify-center items-center">
       <div className="max-w-136 w-full bg-white rounded-xl border-t-4 border-primary py-12 px-[72px]">
@@ -21,6 +51,12 @@ const LoginPage = () => {
           Enter your credentials to access the dashboard
         </p>
 
+        {errorMessage && (
+          <div className="px-3 py-1 bg-primary-light border border-primary rounded-md text-primary text-sm text-center ">
+            {errorMessage}
+          </div>
+        )}
+
         <div className="input-group-admin mb-5">
           <label htmlFor="email">Email</label>
           <input
@@ -29,6 +65,9 @@ const LoginPage = () => {
             name="email"
             placeholder="Please type your email"
             className="rounded-lg!"
+            onChange={(e) =>
+              setCredentials((prev) => ({ ...prev, email: e.target.value }))
+            }
           />
         </div>
         <div className="input-group-admin mb-12">
@@ -39,13 +78,18 @@ const LoginPage = () => {
             name="password"
             placeholder="••••••••••••••••••••"
             className="rounded-lg!"
+            onChange={(e) => {
+              setCredentials((prev) => ({ ...prev, password: e.target.value }));
+            }}
           />
         </div>
         <Button
           className="w-full rounded-lg! mb-8"
-          onClick={() => push("/admin/products")}
+          onClick={() => {
+            handleLogin();
+          }}
         >
-          Sign In
+          {isLoading ? "Signing in....." : "Sign In"}
         </Button>
       </div>
     </main>

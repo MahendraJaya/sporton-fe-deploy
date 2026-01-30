@@ -1,77 +1,18 @@
 import { getImageUrl } from "@/app/lib/api";
+import { Product } from "@/app/types";
 // import { getAllProducts } from "@/app/services/product.service";
 import priceFormatter from "@/app/utils/price-converter";
 import Image from "next/image";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 
-const ProductTable =  () => {
-//   const products = await getAllProducts();
-const products = [
-    {
-        _id: "1",
-        name: "SportOn Product 1",
-        category: "Category 1",
-        price: 100,
-        stock: 10,
-        imageUrl: "/images/product/product-1.png"
-    },
-    {
-        _id: "2",
-        name: "SportOn Product 2",
-        category: "Category 2",
-        price: 100,
-        stock: 10,
-        imageUrl: "/images/product/product-2.png"
-    },
-    {
-        _id: "3",
-        name: "SportOn Product 3",
-        category: "Category 3",
-        price: 100,
-        stock: 10,
-        imageUrl: "/images/product/product-3.png"
-    },
-    {
-        _id: "4",
-        name: "SportOn Product 4",
-        category: "Category 4",
-        price: 100,
-        stock: 10,
-        imageUrl: "/images/product/product-4.png"
-    },
-    {
-        _id: "5",
-        name: "SportOn Product 5",
-        category: "Category 5",
-        price: 100,
-        stock: 10,
-        imageUrl: "/images/product/product-5.png"
-    },
-    {
-        _id: "6",
-        name: "SportOn Product 6",
-        category: "Category 6",
-        price: 100,
-        stock: 10,
-        imageUrl: "/images/product/product-6.png"
-    },
-    {
-        _id: "7",
-        name: "SportOn Product 7",
-        category: "Category 7",
-        price: 100,
-        stock: 10,
-        imageUrl: "/images/product/product-7.png"
-    },
-    {
-        _id: "8",
-        name: "SportOn Product 8",
-        category: "Category 8",
-        price: 100,
-        stock: 10,
-        imageUrl: "/images/product/product-8.png"
-    },
-]
+type TProductTableProps = {
+  products: Product[];
+  onDelete?: (id:string) => void;
+  onEdit?: (product: Product) => void;
+  onSuccess?: () => void;
+}
+//jam 01:05
+const ProductTable =  ({products, onDelete, onEdit, onSuccess} : TProductTableProps) => {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200">
@@ -93,7 +34,7 @@ const products = [
             >
               <td className="px-6 py-4 flex items-center gap-3 font-medium ">
                 <Image
-                  src={product.imageUrl}
+                  src={getImageUrl(product.imageUrl)}
                   width={54}
                   height={50}
                   alt={product.name}
@@ -103,17 +44,17 @@ const products = [
               </td>
               <td className="px-6 py-4 ">
                 <span className="bg-gray-200 px-2 py-1 rounded-lg">
-                  {product.category}
+                  {product.category.name}
                 </span>
               </td>
               <td className="px-6 py-4">{priceFormatter(product.price)}</td>
               <td className="px-6 py-4">{product.stock} Units</td>
               <td className="px-6 py-4 text-gray-600">
-                <button>
-                  <FiEdit2 size={20} />
+                <button className="cursor-pointer">
+                  <FiEdit2 size={20} onClick={() => {onEdit?.(product)}}/>
                 </button>
-                <button className="ml-3">
-                  <FiTrash2 size={20} />
+                <button className="ml-3 cursor-pointer">
+                  <FiTrash2 size={20} onClick={() => {onDelete?.(product._id)}}/>
                 </button>
               </td>
             </tr>

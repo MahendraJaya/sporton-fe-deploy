@@ -7,6 +7,20 @@ export interface Category {
   updatedAt:    string;
 }
 
+export interface LoginCredentials {
+  email: string;
+  password: string
+}
+
+export interface LoginResponse{
+  token: string;
+  user: {
+    id:string;
+    name:string;
+    email:string;
+  }
+}
+
 export interface Product {
   _id:          string;
   name:         string;
@@ -33,4 +47,13 @@ export interface Transaction {
   customerAddress: string;
   createdAt: string;
   updatedAt: string; 
+}
+
+export interface Bank{
+  _id: string;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+  createdAt : string;
+  updatedAt : string;
 }

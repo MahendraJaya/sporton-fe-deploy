@@ -1,32 +1,23 @@
 import { getImageUrl } from "@/app/lib/api";
+import { Category } from "@/app/types";
 // import { getAllProducts } from "@/app/services/product.service";
 import priceFormatter from "@/app/utils/price-converter";
 import Image from "next/image";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 
-const CategoryTable =  () => {
-//   const products = await getAllProducts();
-const categories = [
-    {
-        _id: "1",
-        name: "Badminton",
-        description : "lorem ipsum dolor sit amet",
-        imageUrl: "/images/categories/category-badminton.svg"
-    },
-    {
-        _id: "2",
-        name: "Basketball",
-        description : "lorem ipsum dolor sit amet",
-        imageUrl: "/images/categories/category-basketball.svg"
-    },
-    {
-        _id: "3",
-        name: "Football",
-        description : "lorem ipsum dolor sit amet",
-        imageUrl: "/images/categories/category-football.svg"
-    },
-]
+type TCategoryTableProps = {
+  categories: Category[];
+  isOpen: () => void;
+  isOpenEditCategory: (category: Category) => void;
+  isDeleteModalOpen: (id: string) => void;
+};
 
+const CategoryTable = ({
+  categories,
+  isOpen,
+  isOpenEditCategory,
+  isDeleteModalOpen,
+}: TCategoryTableProps) => {
   return (
     <div className="bg-white rounded-xl border border-gray-200">
       <table className="w-full text-left border-collapse">
@@ -45,7 +36,7 @@ const categories = [
             >
               <td className="px-6 py-4 flex items-center gap-3 font-medium ">
                 <Image
-                  src={category.imageUrl}
+                  src={getImageUrl(category.imageUrl)}
                   width={54}
                   height={50}
                   alt={category.name}
@@ -55,10 +46,20 @@ const categories = [
               </td>
               <td className="px-6 py-4">{category.description}</td>
               <td className="px-6 py-4 text-gray-600">
-                <button className="cursor-pointer">
+                <button
+                  className="cursor-pointer"
+                  onClick={() => {
+                    isOpenEditCategory(category);
+                  }}
+                >
                   <FiEdit2 size={20} />
                 </button>
-                <button className="ml-3 cursor-pointer">
+                <button
+                  className="ml-3 cursor-pointer"
+                  onClick={() => {
+                    isDeleteModalOpen(category._id);
+                  }}
+                >
                   <FiTrash2 size={20} />
                 </button>
               </td>

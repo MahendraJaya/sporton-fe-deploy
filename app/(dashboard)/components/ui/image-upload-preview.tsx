@@ -36,7 +36,7 @@ const ImageUploadPreview = ({
           <Image
             src={value}
             alt="preview product"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             width={200}
             height={200}
           />
