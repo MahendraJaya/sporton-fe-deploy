@@ -29,7 +29,7 @@ const TransactionModal = ({
   const handleStatusUpdate = async (status: "paid" | "rejected") => {
     setIsUpdating(true);
     try {
-      await onStatusChange(transaction?._id, status);
+      await onStatusChange(transaction._id, status);
     } catch (error) {
       console.error(error);
     } finally {
