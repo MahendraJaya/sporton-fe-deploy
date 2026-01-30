@@ -40,7 +40,7 @@ export interface Transaction {
   purchasedItems : {
     productId: string;
     qty: number;
-  }
+  }[];
   totalPayment: string;
   customerName: string;
   customerContact: number | null;
